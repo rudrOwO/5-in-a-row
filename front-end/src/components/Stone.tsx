@@ -14,19 +14,22 @@ interface Props {
     x: number;
     y: number;
   };
-  color: "white" | "black";
+  color?: "white" | "black";
+  visibility?: "hidden" | "visible";
 }
 
 const AnimatedImg = chakra(motion.img, {
-  shouldForwardProp: (prop: string) => isValidMotionProp(prop) || prop === "src",
+  shouldForwardProp: (prop: string) =>
+    isValidMotionProp(prop) || prop === "src",
 });
 
-const Stone = ({ color }: Props) => (
+const Stone = ({ color = "white", visibility = "hidden" }: Props) => (
   <AnimatedImg
     borderRadius="50%"
     borderWidth={0}
     boxSize={`${stoneSize}rem`}
     src={stoneImgSrc[color]}
+    visibility={visibility}
     animate={{ scale: [0.2, 1] }}
     //@ts-ignore
     transition={{ duration: 0.2 }}

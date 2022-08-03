@@ -16,7 +16,7 @@ const Board = () => {
       filler[i] = new Array<StoneIndicator>(boardDimension);
 
       for (let j = 0; j < boardDimension; ++j) {
-        filler[i][j] = "w";
+        filler[i][j] = "";
       }
     }
 
@@ -29,15 +29,14 @@ const Board = () => {
       <VStack position="relative" zIndex={2} spacing={`${stoneSize / 2}rem`}>
         {board.map((stoneRow, y) => (
           <HStack key={y} spacing={`${stoneSize / 2}rem`}>
-            {stoneRow.map((stoneIndicator, x) =>
-              stoneIndicator === "" ? null : (
-                <Stone
-                  position={{ x, y }}
-                  key={x}
-                  color={stoneIndicator === "w" ? "white" : "black"}
-                />
-              )
-            )}
+            {stoneRow.map((stoneIndicator, x) => (
+              <Stone
+                position={{ x, y }}
+                key={x}
+                visibility={stoneIndicator === "" ? "hidden" : "visible"}
+                color={stoneIndicator === "w" ? "white" : "black"}
+              />
+            ))}
           </HStack>
         ))}
       </VStack>
