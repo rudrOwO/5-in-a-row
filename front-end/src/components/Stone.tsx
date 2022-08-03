@@ -10,6 +10,10 @@ const stoneImgSrc = {
 };
 
 interface Props {
+  position: {
+    x: number;
+    y: number;
+  };
   color: "white" | "black";
 }
 
@@ -20,6 +24,7 @@ const AnimatedImg = chakra(motion.img, {
 const Stone = ({ color }: Props) => (
   <AnimatedImg
     borderRadius="50%"
+    borderWidth={0}
     boxSize={`${stoneSize}rem`}
     src={stoneImgSrc[color]}
     animate={{ scale: [0.2, 1] }}
