@@ -5,7 +5,7 @@ import Grid from "./Grid";
 
 export const boardSize = `${(10 + (10 - 1) / 2) * stoneSize}rem`;
 export const boardDimension = 10;
-type StoneIndicator = "w" | "b" | "";
+export type StoneIndicator = "w" | "b" | "";
 
 const Board = () => {
   const [board, setBoard] = useState<StoneIndicator[][]>(() => {
@@ -33,8 +33,9 @@ const Board = () => {
               <Stone
                 position={{ x, y }}
                 key={x}
-                visibility={stoneIndicator === "" ? "hidden" : "visible"}
+                opacity={stoneIndicator === "" ? 0 : 1}
                 color={stoneIndicator === "w" ? "white" : "black"}
+                setBoard={setBoard}
               />
             ))}
           </HStack>
