@@ -1,5 +1,4 @@
 import { Image } from "@chakra-ui/react";
-import { motion, isValidMotionProp } from "framer-motion";
 import { memo, Dispatch, SetStateAction, useCallback } from "react";
 import { StoneIndicator } from "./Board";
 
@@ -20,10 +19,10 @@ interface StoneProps {
   setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
 }
 
+let count = 0;
+
 const Stone = (props: StoneProps) => {
   const { color = "white", opacity = 0, setBoard, position } = props;
-
-  console.log(`Re-render at ${position.y}, ${position.x}`);
 
   const handleClick = useCallback(() => {
     if (opacity) return;
@@ -45,8 +44,15 @@ const Stone = (props: StoneProps) => {
       src={stoneImgSrc[color]}
       opacity={opacity}
       onClick={handleClick}
+      _hover={{
+        opacity: Math.max(opacity, 0.33),
+      }}
     />
   );
 };
 
-export default memo(Stone);
+export default memo(
+  Stone,
+  (prevProps: StoneProps, nextProps: StoneProps) =>
+    prevProps.opacity === nextProps.opacity
+);
