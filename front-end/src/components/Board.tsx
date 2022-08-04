@@ -7,8 +7,11 @@ import ClearButton from "./ClearButton";
 
 export const boardSize = `${(10 + (10 - 1) / 2) * stoneSize}rem`;
 export const boardDimension = 10;
-
-type StoneIndicator = "w" | "b" | "";
+export enum StoneIndicator {
+  EMPTY,
+  WHITE,
+  BLACK,
+}
 
 const Board = () => {
   const [board, setBoard] = useState<StoneIndicator[][]>(() => {
@@ -19,7 +22,7 @@ const Board = () => {
       filler[i] = new Array<StoneIndicator>(boardDimension);
 
       for (let j = 0; j < boardDimension; ++j) {
-        filler[i][j] = "";
+        filler[i][j] = StoneIndicator.EMPTY;
       }
     }
 
@@ -30,7 +33,7 @@ const Board = () => {
     null
   );
 
-  console.log(board);
+  // console.log(board);
 
   return (
     <Box>
@@ -46,8 +49,7 @@ const Board = () => {
               <Stone
                 position={{ x, y }}
                 key={x}
-                opacity={stoneIndicator === "" ? 0 : 1}
-                color={stoneIndicator === "w" ? "white" : "black"}
+                opacity={stoneIndicator === StoneIndicator.EMPTY ? 0 : 1}
                 setBoard={setBoard}
               />
             ))}

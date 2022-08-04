@@ -1,16 +1,19 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { Button, Text } from "@chakra-ui/react";
 import { AiOutlineClear } from "react-icons/ai";
+import { StoneIndicator } from "./Board";
 
 interface ClearButtonProps {
-  setBoard: Dispatch<SetStateAction<("w" | "b" | "")[][]>>;
+  setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
 }
 
 const ClearButton = (props: ClearButtonProps) => {
   const { setBoard } = props;
   const handleClick = useCallback(() => {
     setBoard(prevBoard =>
-      prevBoard.map(boardRow => boardRow.map(stoneIndicator => ""))
+      prevBoard.map(boardRow =>
+        boardRow.map(stoneIndicator => StoneIndicator.EMPTY)
+      )
     );
   }, []);
 

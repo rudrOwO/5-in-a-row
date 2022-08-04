@@ -1,27 +1,32 @@
 import { Image } from "@chakra-ui/react";
 import { memo, Dispatch, SetStateAction, useCallback } from "react";
+import { StoneIndicator } from "./Board";
 
 export const stoneSize: number = 1.75;
 
-const stoneImgSrc = {
-  white: "src/assets/240px-Go_w.svg.png",
-  black: "src/assets/240px-Go_b.svg.png",
-};
+const stoneImgSrc = [
+  ,
+  "src/assets/240px-Go_w.svg.png",
+  "src/assets/240px-Go_b.svg.png",
+];
 
 interface StoneProps {
   position: {
     x: number;
     y: number;
   };
-  color?: "white" | "black";
+  stoneIndicator?: StoneIndicator;
   opacity?: 0 | 1;
-  setBoard: Dispatch<SetStateAction<("w" | "b" | "")[][]>>;
+  setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
 }
 
-let count = 0;
-
 const Stone = (props: StoneProps) => {
-  const { color = "white", opacity = 0, setBoard, position } = props;
+  const {
+    stoneIndicator = StoneIndicator.BLACK,
+    opacity = 0,
+    setBoard,
+    position,
+  } = props;
 
   const handleClick = useCallback(() => {
     if (opacity) return;
@@ -29,8 +34,7 @@ const Stone = (props: StoneProps) => {
 
     setBoard(prevBoard => {
       const mutatedBoard = [...prevBoard];
-      mutatedBoard[y][x] = color === "white" ? "w" : "b";
-
+      mutatedBoard[y][x] = StoneIndicator.BLACK;
       return mutatedBoard;
     });
   }, [opacity]);
@@ -40,7 +44,7 @@ const Stone = (props: StoneProps) => {
       borderRadius="50%"
       borderWidth={0}
       boxSize={`${stoneSize}rem`}
-      src={stoneImgSrc[color]}
+      src={stoneImgSrc[stoneIndicator]}
       opacity={opacity}
       onClick={handleClick}
       _hover={{

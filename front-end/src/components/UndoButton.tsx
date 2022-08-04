@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button, Text } from "@chakra-ui/react";
 import { AiOutlineUndo } from "react-icons/ai";
+import { StoneIndicator } from "./Board";
 
 interface UndoButtonProps {
   setHistory: Dispatch<SetStateAction<{ x: number; y: number }[] | null>>;
-  setBoard: Dispatch<SetStateAction<("w" | "b" | "")[][]>>;
+  setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
 }
 
 const UndoButton = (props: UndoButtonProps) => {
