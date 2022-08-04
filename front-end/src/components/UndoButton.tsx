@@ -1,26 +1,38 @@
 import { Dispatch, SetStateAction, useCallback, memo } from "react";
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Text, Box, useToast } from "@chakra-ui/react";
 import { AiOutlineUndo } from "react-icons/ai";
 import { StoneIndicator } from "./Board";
 
-interface UndoButtonProps {
-  history: { x: number; y: number }[];
-  setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
+export interface UndoButtonProps {
+  history: number[];
+  setBoard: Dispatch<SetStateAction<StoneIndicator[]>>;
 }
 
 const UndoButton = (props: UndoButtonProps) => {
   const { history, setBoard } = props;
+  const undoToast = useToast();
 
   const handleClick = useCallback(() => {
     const toBeRemoved = history.splice(-2);
 
     setBoard(prevBoard => {
       const mutatedBoard = [...prevBoard];
-      for (let { x, y } of toBeRemoved) {
-        mutatedBoard[y][x] = StoneIndicator.EMPTY;
+      for (let position of toBeRemoved) {
+        mutatedBoard[position] = StoneIndicator.EMPTY;
       }
       return mutatedBoard;
     });
+
+    if (toBeRemoved.length > 1) {
+      undoToast({
+        position: "bottom-right",
+        render: () => (
+          <Box color="#EEEEEE" p={2} bg="#141414" borderRadius="md">
+            Rolled back 2 moves
+          </Box>
+        ),
+      });
+    }
   }, []);
 
   return (

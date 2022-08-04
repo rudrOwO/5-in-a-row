@@ -1,12 +1,12 @@
 import { memo, ReactNode } from "react";
 import { chakra } from "@chakra-ui/react";
-import { boardDimension, boardSize } from "./Board";
+import { boardSize } from "./Board";
 
 /**
  * TODO Reactor out the constant numbers used here later
  */
 
-const Grid = () => {
+const LineGrid = () => {
   return (
     <chakra.svg
       position="absolute"
@@ -38,4 +38,4 @@ const Grid = () => {
   );
 };
 
-export default memo(Grid);
+export default memo(LineGrid);

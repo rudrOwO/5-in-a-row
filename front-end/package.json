@@ -1,5 +1,5 @@
 {
-  "name": "gomoku",
+  "name": "gomoku-mini",
   "author": "Dardaul Hoque <bsse1126@iit.du.ac.bd>",
   "description": "An interactive gomoku (5 in-a-row) AI",
   "private": true,
