@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, memo } from "react";
 import { Button, Text } from "@chakra-ui/react";
 import { AiOutlineClear } from "react-icons/ai";
 import { StoneIndicator } from "./Board";
@@ -21,21 +21,21 @@ const ClearButton = (props: ClearButtonProps) => {
     <Button
       bg="#1A1A1A"
       colorScheme="blackAlpha"
-      borderRadius="xl"
+      borderRadius="md"
       size="lg"
-      mb="5%"
+      mx="0.875rem"
       _hover={{
         background: "#1A1A1A",
       }}
-      leftIcon={<AiOutlineClear fontSize="30px" color="#eeeeee" />}
+      leftIcon={<AiOutlineClear fontSize="25px" color="#eeeeee" />}
       iconSpacing="3px"
       onClick={handleClick}
     >
-      <Text fontSize="xl" ml="15px" mt="5px" color="#eeeeee">
-        Clear All
+      <Text fontSize="lg" ml="15px" mt="5px" color="#eeeeee">
+        Clear
       </Text>
     </Button>
   );
 };
 
-export default ClearButton;
+export default memo(ClearButton);

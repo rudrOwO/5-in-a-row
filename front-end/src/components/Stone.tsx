@@ -17,6 +17,9 @@ interface StoneProps {
   };
   stoneIndicator?: StoneIndicator;
   opacity?: 0 | 1;
+  history: { x: number; y: number }[];
+  isFetching: boolean;
+  setIsFetching: Dispatch<SetStateAction<boolean>>;
   setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
 }
 
@@ -26,18 +29,23 @@ const Stone = (props: StoneProps) => {
     opacity = 0,
     setBoard,
     position,
+    history,
+    isFetching,
+    setIsFetching,
   } = props;
 
   const handleClick = useCallback(() => {
-    if (opacity) return;
-    const { x, y } = position;
+    if (opacity || isFetching) return;
+    history.push(position);
 
     setBoard(prevBoard => {
       const mutatedBoard = [...prevBoard];
-      mutatedBoard[y][x] = StoneIndicator.BLACK;
+      mutatedBoard[position.y][position.x] = StoneIndicator.BLACK;
       return mutatedBoard;
     });
-  }, [opacity]);
+
+    setIsFetching(true);
+  }, [opacity, isFetching]);
 
   return (
     <Image
@@ -48,7 +56,7 @@ const Stone = (props: StoneProps) => {
       opacity={opacity}
       onClick={handleClick}
       _hover={{
-        opacity: Math.max(opacity, 0.33),
+        opacity: opacity === 1 ? 1 : isFetching ? 0 : 0.33,
       }}
     />
   );
@@ -57,5 +65,6 @@ const Stone = (props: StoneProps) => {
 export default memo(
   Stone,
   (prevProps: StoneProps, nextProps: StoneProps) =>
-    prevProps.opacity === nextProps.opacity
+    prevProps.opacity === nextProps.opacity &&
+    prevProps.isFetching === nextProps.isFetching
 );

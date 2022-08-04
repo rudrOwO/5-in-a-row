@@ -1,5 +1,5 @@
-import { VStack, HStack, Box, Flex } from "@chakra-ui/react";
-import { useState } from "react";
+import { VStack, HStack, Box, Flex, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import Stone, { stoneSize } from "./Stone";
 import Grid from "./Grid";
 import UndoButton from "./UndoButton";
@@ -28,21 +28,47 @@ const Board = () => {
 
     return filler;
   });
+  const history = useRef<{ x: number; y: number }[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
 
-  const [history, setHistory] = useState<{ x: number; y: number }[] | null>(
-    null
-  );
+  const fetchServerRespose = useEffect(() => {
+    /**
+     * TODO <Dummy Fetch> Implement Later
+     * * Push move to history
+     * * Update move in board
+     * * Update isFetching state
+     */
+
+    console.log("FETCHING");
+    setTimeout(() => setIsFetching(false), 200);
+  }, [isFetching]);
 
   // console.log(board);
+  // console.log(history);
 
   return (
     <Box>
-      <Flex justifyContent="space-evenly">
-        <UndoButton setHistory={setHistory} setBoard={setBoard} />
-        <ClearButton setBoard={setBoard} />
+      <Flex justifyContent="space-between" mb="5%">
+        {isFetching ? (
+          <Text color="#141414" fontSize="xl" width="full" textAlign="center">
+            Calculating ...
+          </Text>
+        ) : (
+          <>
+            <UndoButton history={history.current} setBoard={setBoard} />
+            <ClearButton setBoard={setBoard} />
+          </>
+        )}
       </Flex>
       <Grid />
-      <VStack position="relative" zIndex={2} spacing={`${stoneSize / 2}rem`}>
+      <VStack
+        position="relative"
+        zIndex={2}
+        spacing={`${stoneSize / 2}rem`}
+        _hover={{
+          cursor: isFetching ? "not-allowed" : "auto",
+        }}
+      >
         {board.map((stoneRow, y) => (
           <HStack key={y} spacing={`${stoneSize / 2}rem`}>
             {stoneRow.map((stoneIndicator, x) => (
@@ -51,6 +77,9 @@ const Board = () => {
                 key={x}
                 opacity={stoneIndicator === StoneIndicator.EMPTY ? 0 : 1}
                 setBoard={setBoard}
+                history={history.current}
+                isFetching={isFetching}
+                setIsFetching={setIsFetching}
               />
             ))}
           </HStack>
