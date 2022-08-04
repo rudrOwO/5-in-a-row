@@ -27,11 +27,11 @@ const ClearButton = (props: ClearButtonProps) => {
       _hover={{
         background: "#1A1A1A",
       }}
-      leftIcon={<AiOutlineClear fontSize="25px" color="#eeeeee" />}
+      leftIcon={<AiOutlineClear fontSize="25px" color="#EEEEEE" />}
       iconSpacing="3px"
       onClick={handleClick}
     >
-      <Text fontSize="lg" ml="15px" mt="5px" color="#eeeeee">
+      <Text fontSize="lg" ml="15px" mt="5px" color="#EEEEEE">
         Clear
       </Text>
     </Button>

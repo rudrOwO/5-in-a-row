@@ -9,6 +9,20 @@ interface UndoButtonProps {
 }
 
 const UndoButton = (props: UndoButtonProps) => {
+  const { history, setBoard } = props;
+
+  const handleClick = useCallback(() => {
+    const toBeRemoved = history.splice(-2);
+
+    setBoard(prevBoard => {
+      const mutatedBoard = [...prevBoard];
+      for (let { x, y } of toBeRemoved) {
+        mutatedBoard[y][x] = StoneIndicator.EMPTY;
+      }
+      return mutatedBoard;
+    });
+  }, []);
+
   return (
     <Button
       bg="#1A1A1A"
@@ -21,8 +35,7 @@ const UndoButton = (props: UndoButtonProps) => {
       }}
       leftIcon={<AiOutlineUndo fontSize="25px" color="#eeeeee" />}
       iconSpacing="1px"
-
-      //   onClick={handleClick}
+      onClick={handleClick}
     >
       <Text fontSize="lg" ml="15px" mt="5px" color="#eeeeee">
         Undo
