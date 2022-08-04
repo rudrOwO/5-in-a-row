@@ -1,6 +1,5 @@
 import { Image } from "@chakra-ui/react";
 import { memo, Dispatch, SetStateAction, useCallback } from "react";
-import { StoneIndicator } from "./Board";
 
 export const stoneSize: number = 1.75;
 
@@ -16,7 +15,7 @@ interface StoneProps {
   };
   color?: "white" | "black";
   opacity?: 0 | 1;
-  setBoard: Dispatch<SetStateAction<StoneIndicator[][]>>;
+  setBoard: Dispatch<SetStateAction<("w" | "b" | "")[][]>>;
 }
 
 let count = 0;

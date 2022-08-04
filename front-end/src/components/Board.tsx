@@ -1,11 +1,14 @@
-import { VStack, HStack, Box } from "@chakra-ui/react";
+import { VStack, HStack, Box, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import Stone, { stoneSize } from "./Stone";
 import Grid from "./Grid";
+import UndoButton from "./UndoButton";
+import ClearButton from "./ClearButton";
 
 export const boardSize = `${(10 + (10 - 1) / 2) * stoneSize}rem`;
 export const boardDimension = 10;
-export type StoneIndicator = "w" | "b" | "";
+
+type StoneIndicator = "w" | "b" | "";
 
 const Board = () => {
   const [board, setBoard] = useState<StoneIndicator[][]>(() => {
@@ -23,8 +26,18 @@ const Board = () => {
     return filler;
   });
 
+  const [history, setHistory] = useState<{ x: number; y: number }[] | null>(
+    null
+  );
+
+  console.log(board);
+
   return (
     <Box>
+      <Flex justifyContent="space-evenly">
+        <UndoButton setHistory={setHistory} setBoard={setBoard} />
+        <ClearButton setBoard={setBoard} />
+      </Flex>
       <Grid />
       <VStack position="relative" zIndex={2} spacing={`${stoneSize / 2}rem`}>
         {board.map((stoneRow, y) => (
