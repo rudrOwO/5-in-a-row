@@ -44,8 +44,6 @@ const Stone = (props: StoneProps) => {
     setIsFetching(true);
   }, [opacity]);
 
-  console.log(`STONE rendered ${++count} times`);
-
   return (
     <Image
       borderRadius="50%"

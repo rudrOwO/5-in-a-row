@@ -4,12 +4,14 @@ import { AiOutlineUndo } from "react-icons/ai";
 import { StoneIndicator } from "./Board";
 
 export interface UndoButtonProps {
+  disabled?: boolean;
   history: number[];
+  setIsGameOver: Dispatch<SetStateAction<boolean>>;
   setBoard: Dispatch<SetStateAction<StoneIndicator[]>>;
 }
 
 const UndoButton = (props: UndoButtonProps) => {
-  const { history, setBoard } = props;
+  const { history, setBoard, disabled = false, setIsGameOver } = props;
   const undoToast = useToast();
 
   const handleClick = useCallback(() => {
@@ -33,10 +35,13 @@ const UndoButton = (props: UndoButtonProps) => {
         ),
       });
     }
+
+    setIsGameOver(false);
   }, []);
 
   return (
     <Button
+      disabled={disabled}
       bg="#1A1A1A"
       colorScheme="blackAlpha"
       borderRadius="md"

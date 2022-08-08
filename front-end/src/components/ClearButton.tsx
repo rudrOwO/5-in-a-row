@@ -1,17 +1,15 @@
-import { Dispatch, SetStateAction, useCallback, memo } from "react";
+import { useCallback, memo } from "react";
 import { Button, Text, Box, useToast } from "@chakra-ui/react";
 import { AiOutlineClear } from "react-icons/ai";
 import { StoneIndicator } from "./Board";
 import { UndoButtonProps } from "./UndoButton";
 
 const ClearButton = (props: UndoButtonProps) => {
-  const { history, setBoard } = props;
+  const { history, setBoard, disabled = false, setIsGameOver } = props;
   const clearToast = useToast();
 
   const handleClick = useCallback(() => {
-    setBoard(prevBoard =>
-      prevBoard.map(stoneIndicator => StoneIndicator.EMPTY)
-    );
+    setBoard(prevBoard => prevBoard.map(stoneIndicator => StoneIndicator.EMPTY));
 
     history.splice(0, history.length);
 
@@ -23,10 +21,13 @@ const ClearButton = (props: UndoButtonProps) => {
         </Box>
       ),
     });
+
+    setIsGameOver(false);
   }, []);
 
   return (
     <Button
+      disabled={disabled}
       bg="#1A1A1A"
       colorScheme="blackAlpha"
       borderRadius="md"

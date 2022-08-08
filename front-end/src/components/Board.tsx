@@ -1,4 +1,4 @@
-import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Stone, { stoneSize } from "./Stone";
 import LineGrid from "./LineGrid";
@@ -16,17 +16,16 @@ export enum StoneIndicator {
 
 const Board = () => {
   const [board, setBoard] = useState<StoneIndicator[]>(() => {
-    const filler = new Array<StoneIndicator>(10 * 10); // Create empty array
+    const filler = new Array<StoneIndicator>(10 * 10);
 
     for (let i = 0; i < 10 * 10; ++i) {
-      // Filling with Proper StoneIndicatorValue
       filler[i] = StoneIndicator.EMPTY;
     }
-
     return filler;
   });
-  const history = useRef<number[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const history = useRef<number[]>([]);
 
   const fetchServerRespose = useEffect(() => {
     /**
@@ -34,38 +33,28 @@ const Board = () => {
      * * Push move to history
      * * Update move in board
      * * Update isFetching state
+     * * Handle Game Over
      */
-
-    setTimeout(() => setIsFetching(false), 1000);
   }, [isFetching]);
-
-  // console.log(board);
-  // console.log(history);
 
   return (
     <Box>
       <Flex justifyContent="space-between" mb="5%">
-        {isFetching ? (
-          <>
-            <BoardLock />
-            <Text color="#141414" fontSize="xl" width="full" textAlign="center">
-              Calculating ...
-            </Text>
-          </>
-        ) : (
-          <>
-            <UndoButton history={history.current} setBoard={setBoard} />
-            <ClearButton history={history.current} setBoard={setBoard} />
-          </>
-        )}
+        <UndoButton
+          disabled={isFetching && !isGameOver}
+          history={history.current}
+          setBoard={setBoard}
+          setIsGameOver={setIsGameOver}
+        />
+        <ClearButton
+          disabled={isFetching && !isGameOver}
+          history={history.current}
+          setBoard={setBoard}
+          setIsGameOver={setIsGameOver}
+        />
       </Flex>
       <LineGrid />
-      <SimpleGrid
-        position="relative"
-        zIndex={1}
-        columns={10}
-        spacing={stoneSpacing}
-      >
+      <SimpleGrid position="relative" zIndex={1} columns={10} spacing={stoneSpacing}>
         {board.map((stoneIndicator, i) => (
           <Stone
             position={i}
@@ -77,6 +66,10 @@ const Board = () => {
           />
         ))}
       </SimpleGrid>
+      <Flex h="3vh" alignItems="center">
+        {isFetching && <BoardLock message="Calculating ..." />}
+        {isGameOver && <BoardLock message="Game Over: Computer Wins!" />}
+      </Flex>
     </Box>
   );
 };
