@@ -6,31 +6,33 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"gomoku/ai"
 )
 
-type Board struct {
-	Ara [5]int8 `json:"board"`
+type Request struct {
+	Grid [5]int8 `json:"grid"`
 }
 
 func main() {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		var board Board
+		var grid Request
+		ai.Init()
 
-		if err := c.BindJSON(&board); err != nil {
+		if err := c.BindJSON(&grid); err != nil {
 			fmt.Print(err)
 			return
 		}
 
-		for i := range board.Ara {
-			board.Ara[i] += 1
+		for i := range grid.Grid {
+			grid.Grid[i] += 1
 		}
 
-		// fmt.Print(board.Ara)
-
-		c.JSON(http.StatusOK, board)
+		c.JSON(http.StatusOK, grid)
 	})
 
 	r.Run("localhost:5000")
+
 }
