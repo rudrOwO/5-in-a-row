@@ -1,23 +1,22 @@
 package ai
 
 import (
-	"fmt"
 	"math"
 )
 
 /*
 	* UI
 	* board
-	TODO static eval -> Use Heuristic
-	TODO minimax + pruning
-	TODO Utility of move -> Human, AI, Net
-	? Concurrency
+	TODO static eval
+	* minimax + pruning
+	TODO Utility of move
+	TODO Concurrency
 	? Move Ordering
 	? Caching
 */
 
 // * GLOBAL STUFF
-var GAMESTATE string
+var GAMEOVER = false
 var SEGMENT_HEURISTICS [6]int = [6]int{-1, 1, 2, 6, 100, 1000}
 
 const (
@@ -30,17 +29,15 @@ const (
 )
 
 func getMaxDepth(saturation uint8) uint8 {
-	if saturation < 9 {
+	if saturation < 9 { // 1 ~ 8 slots occupied
 		return 4
 	}
-
-	if saturation < 16 {
+	if saturation < 16 { // 9 ~ 15 slots occupied
 		return 5
 	}
 
-	return BOARDSIZE
+	return BOARDSIZE // 16 ~ 25 slots occupied
 }
 
 func Init() {
-	fmt.Print(GAMESTATE, "\n")
 }

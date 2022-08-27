@@ -14,23 +14,25 @@ type Request struct {
 	Grid [5]uint8 `json:"grid"`
 }
 
+type Response struct {
+	AIMove     uint8 `json:"AIMove"`
+	IsGameOver bool  `json:"isGameOver"`
+}
+
 func main() {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
 		var grid Request
 		ai.Init()
+		response := Response{0, ai.GAMEOVER}
 
 		if err := c.BindJSON(&grid); err != nil {
 			fmt.Print(err)
 			return
 		}
 
-		for i := range grid.Grid {
-			grid.Grid[i] += 1
-		}
-
-		c.JSON(http.StatusOK, grid)
+		c.JSON(http.StatusOK, response)
 	})
 
 	r.Run("localhost:5000")

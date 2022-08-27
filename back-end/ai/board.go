@@ -49,10 +49,9 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) (performance int) {
 
 	// Negative Slope
 
-	// Evaluate Board State
+	// Handle Extreme Value -> 5 in a row!
 
-	// Handle Game Over
-	// performance = EXTREME_VALUE
+	// Evaluate Board State
 
 	return
 }

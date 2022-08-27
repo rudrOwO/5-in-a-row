@@ -34,6 +34,7 @@ const Board = () => {
      * * Update move in board
      * * Update isFetching state
      * * Handle Game Over
+     * * Response JSON : {"AIMove": 0,"isGameOver":false}
      */
   }, [isFetching]);
 
