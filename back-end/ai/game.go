@@ -2,6 +2,7 @@ package ai
 
 import (
 	"fmt"
+	"math"
 )
 
 /*
@@ -20,11 +21,12 @@ var GAMESTATE string
 var SEGMENT_HEURISTICS [6]int = [6]int{-1, 1, 2, 6, 100, 1000}
 
 const (
-	DIMENSION uint8 = 5
-	BOARDSIZE uint8 = DIMENSION * DIMENSION
-	EMPTY     uint8 = 0
-	WHITE     uint8 = 1 // AI
-	BLACK     uint8 = 2 // Human
+	DIMENSION     uint8 = 5
+	BOARDSIZE     uint8 = DIMENSION * DIMENSION
+	EMPTY         uint8 = 0
+	WHITE         uint8 = 1 // AI
+	BLACK         uint8 = 2 // Human
+	EXTREME_VALUE int   = math.MaxInt - 1
 )
 
 func getMaxDepth(saturation uint8) uint8 {
@@ -40,5 +42,5 @@ func getMaxDepth(saturation uint8) uint8 {
 }
 
 func Init() {
-	fmt.Print(GAMEOVER, "\n")
+	fmt.Print(GAMESTATE, "\n")
 }
