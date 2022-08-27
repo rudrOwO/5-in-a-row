@@ -69,7 +69,7 @@ const Board = () => {
       </SimpleGrid>
       <Flex h="3vh" alignItems="center">
         {isFetching && <BoardLock message="Calculating ..." />}
-        {isGameOver && <BoardLock message="Game Over: Computer Wins!" />}
+        {isGameOver && <BoardLock message="Game Over!" />}
       </Flex>
     </Box>
   );

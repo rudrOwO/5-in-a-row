@@ -1,18 +1,16 @@
 package ai
 
 func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
-	if depth == maxDepth || board.saturation == BOARDSIZE || GAMEOVER {
+	if GAMEOVER {
+		return 0
+	}
+	if depth == maxDepth || board.saturation == BOARDSIZE {
 		return board.staticEvaluation()
 	}
 
 	depth++
 
 	if turn == WHITE { // This is Maximizing Player (AI -> WHITE)
-		if board.staticEvaluation() == EXTREME_VALUE { // AI Wins!
-			GAMEOVER = true
-			return EXTREME_VALUE
-		}
-
 		bestScore := -EXTREME_VALUE
 
 		for index, piece := range board.grid {
@@ -39,10 +37,6 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 		return bestScore
 
 	} else { // This is Minimizing Player (Human -> BLACK)
-		if board.staticEvaluation() == EXTREME_VALUE {
-			return -EXTREME_VALUE
-		}
-
 		bestScore := EXTREME_VALUE
 
 		for index, piece := range board.grid {

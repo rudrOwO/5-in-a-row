@@ -82,8 +82,9 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		segmentInstances[len]++
 	}
 
-	// Handle Extreme Value -> 5 in a row!
+	// Game Over -> 5 in a row!
 	if segmentInstances[5] > 0 {
+		GAMEOVER = true
 		return EXTREME_VALUE
 	}
 
