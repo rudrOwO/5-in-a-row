@@ -7,7 +7,7 @@ import (
 /*
 	* UI
 	* board
-	TODO static eval
+	* static eval
 	* minimax + pruning
 	TODO Utility of move
 	TODO Concurrency
@@ -16,9 +16,6 @@ import (
 */
 
 // * GLOBAL STUFF
-var GAMEOVER = false
-var SEGMENT_HEURISTICS [6]int = [6]int{-1, 1, 2, 6, 100, 1000}
-
 const (
 	DIMENSION     uint8 = 5
 	BOARDSIZE     uint8 = DIMENSION * DIMENSION
@@ -26,6 +23,29 @@ const (
 	WHITE         uint8 = 1 // AI
 	BLACK         uint8 = 2 // Human
 	EXTREME_VALUE int   = math.MaxInt - 1
+)
+
+var (
+	GAMEOVER            bool           = false
+	SEGMENT_VALUE       [6]int         = [6]int{-1, 1, 2, 6, 100, 1000}
+	POS_DIAGONAL_POINTS [2*5 - 3]Point = [2*5 - 3]Point{
+		{1, 0},
+		{2, 0},
+		{3, 0},
+		{4, 0},
+		{4, 1},
+		{4, 2},
+		{4, 3},
+	}
+	NEG_DIAGONAL_POINTS [2*5 - 3]Point = [2*5 - 3]Point{
+		{1, 4},
+		{2, 4},
+		{3, 4},
+		{4, 4},
+		{4, 1},
+		{4, 2},
+		{4, 3},
+	}
 )
 
 func getMaxDepth(saturation uint8) uint8 {
@@ -40,4 +60,5 @@ func getMaxDepth(saturation uint8) uint8 {
 }
 
 func Init() {
+
 }

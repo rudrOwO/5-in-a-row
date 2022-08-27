@@ -11,7 +11,7 @@ import (
 )
 
 type Request struct {
-	Grid [5]uint8 `json:"grid"`
+	Grid [5]uint8 `json:"grid"` // ! Dummy Request
 }
 
 type Response struct {
@@ -21,11 +21,12 @@ type Response struct {
 
 func main() {
 	r := gin.Default()
+	ai.Init()
 
 	r.GET("/", func(c *gin.Context) {
 		var grid Request
-		ai.Init()
-		response := Response{0, ai.GAMEOVER}
+		response := Response{0, ai.GAMEOVER} // ! Dummy Response
+		ai.GAMEOVER = false
 
 		if err := c.BindJSON(&grid); err != nil {
 			fmt.Print(err)
