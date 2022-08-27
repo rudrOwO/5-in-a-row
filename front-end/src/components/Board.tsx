@@ -27,7 +27,7 @@ const Board = () => {
   const [isGameOver, setIsGameOver] = useState(false);
   const history = useRef<number[]>([]);
 
-  const fetchServerRespose = useEffect(() => {
+  useEffect(() => {
     /**
      * TODO <Dummy Fetch> Implement Later
      * * Push move to history

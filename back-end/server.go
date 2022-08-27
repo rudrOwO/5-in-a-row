@@ -11,7 +11,7 @@ import (
 )
 
 type Request struct {
-	Grid [5]int8 `json:"grid"`
+	Grid [5]uint8 `json:"grid"`
 }
 
 func main() {

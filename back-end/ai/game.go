@@ -5,29 +5,34 @@ import (
 )
 
 /*
-	TODO board
-	TODO static eval
-	TODO Utility
+	* UI
+	* board
+	TODO static eval -> Use Heuristic
+	TODO minimax + pruning
+	TODO Utility of move -> Human, AI, Net
 	? Concurrency
+	? Move Ordering
 	? Caching
 */
 
 // * GLOBAL STUFF
-var GAMEOVER bool = false
+var GAMESTATE string
+var SEGMENT_HEURISTICS [6]int = [6]int{-1, 1, 2, 6, 100, 1000}
 
 const (
-	BOARDSIZE int8 = 25
-	EMPTY     int8 = 0
-	WHITE     int8 = 1
-	BLACK     int8 = 2
+	DIMENSION uint8 = 5
+	BOARDSIZE uint8 = DIMENSION * DIMENSION
+	EMPTY     uint8 = 0
+	WHITE     uint8 = 1 // AI
+	BLACK     uint8 = 2 // Human
 )
 
-func getMaxDepth(saturation int8) int8 {
+func getMaxDepth(saturation uint8) uint8 {
 	if saturation > 16 {
 		return 4
 	}
 
-	if saturation > 8 {
+	if saturation > 9 {
 		return 5
 	}
 
