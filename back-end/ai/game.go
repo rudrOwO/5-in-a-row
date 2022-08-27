@@ -30,11 +30,11 @@ const (
 )
 
 func getMaxDepth(saturation uint8) uint8 {
-	if saturation > 16 {
+	if saturation < 9 {
 		return 4
 	}
 
-	if saturation > 9 {
+	if saturation < 16 {
 		return 5
 	}
 
