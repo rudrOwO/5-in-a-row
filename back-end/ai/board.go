@@ -18,7 +18,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for x := uint8(0); x < DIMENSION; x++ {
-			if board.grid[y*BOARDSIZE+x] == piece {
+			if board.grid[y*DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -34,7 +34,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for x := uint8(0); x < DIMENSION; x++ {
-			if board.grid[x*BOARDSIZE+y] == piece {
+			if board.grid[x*DIMENSION+y] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -50,7 +50,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for y, x := point.y, point.x; y != point.x; {
-			if board.grid[y*BOARDSIZE+x] == piece {
+			if board.grid[y*DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -68,7 +68,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for y, x := point.y, point.x; y != 0 && x != 0; {
-			if board.grid[y*BOARDSIZE+x] == piece {
+			if board.grid[y*DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++

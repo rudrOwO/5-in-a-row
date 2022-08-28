@@ -112,13 +112,13 @@ func GenerateResponse(clientBoard [100]uint8) Response {
 	}
 
 	// Creating 36 boards from the 10x10 board (from client)
-	for i := uint8(0); i <= 5; i++ {
-		for j := uint8(0); j <= 5; j++ {
+	for i := int8(0); i <= 5; i++ {
+		for j := int8(0); j <= 5; j++ {
 			newBoard := Board{grid: [BOARDSIZE]uint8{}, saturation: 0}
 
-			for y, k := i, uint8(0); y < i+5; y++ {
+			for y, k := i, int8(0); y < i+5; y++ {
 				for x := j; x < j+5; x++ {
-					if piece := clientBoard[y*BOARDSIZE+x]; piece != EMPTY {
+					if piece := clientBoard[y*10+x]; piece != EMPTY {
 						newBoard.grid[k] = piece
 						newBoard.saturation++
 					}

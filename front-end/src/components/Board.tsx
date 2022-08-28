@@ -28,14 +28,41 @@ const Board = () => {
   const history = useRef<number[]>([]);
 
   useEffect(() => {
-    /**
-     * TODO <Dummy Fetch> Implement Later
+    /*
      * * Push move to history
      * * Update move in board
      * * Update isFetching state
      * * Handle Game Over
      * * Response JSON : {"AIMove": 0,"isGameOver":false}
      */
+    if (isFetching) {
+      const fetchAIMove = async () => {
+        const response = await fetch("http://localhost:5000/", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            grid: board,
+          }),
+        });
+
+        const { AIMove, isGameOver } = await response.json();
+
+        history.current.push(AIMove);
+
+        setBoard(prevBoard => {
+          const mutatedBoard = [...prevBoard];
+          mutatedBoard[AIMove] = StoneIndicator.WHITE;
+          return mutatedBoard;
+        });
+
+        setIsFetching(false);
+        setIsFetching(isGameOver);
+      };
+
+      fetchAIMove();
+    }
   }, [isFetching]);
 
   return (
