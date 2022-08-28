@@ -5,7 +5,6 @@ type Point struct {
 }
 
 type Board struct {
-	origin     Point
 	grid       [BOARDSIZE]uint8
 	saturation uint8 // How much of the board is filled up
 }
