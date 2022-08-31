@@ -4,7 +4,7 @@ import { StoneIndicator } from "./Board";
 
 export const stoneSize: number = 1.75;
 
-const stoneImgSrc = [, "src/assets/240px-Go_w.svg.png", "src/assets/240px-Go_b.svg.png"];
+const stoneImgSrc = [, "/240px-Go_w.svg.png", "/240px-Go_b.svg.png"];
 
 interface StoneProps {
   position: number;
