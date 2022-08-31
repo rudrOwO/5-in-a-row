@@ -58,7 +58,7 @@ const Board = () => {
         });
 
         setIsFetching(false);
-        setIsFetching(isGameOver);
+        setIsGameOver(isGameOver);
       };
 
       fetchAIMove();
@@ -85,6 +85,9 @@ const Board = () => {
       <SimpleGrid position="relative" zIndex={1} columns={10} spacing={stoneSpacing}>
         {board.map((stoneIndicator, i) => (
           <Stone
+            stoneIndicator={
+              stoneIndicator === StoneIndicator.WHITE ? StoneIndicator.WHITE : StoneIndicator.BLACK
+            }
             position={i}
             key={i}
             opacity={stoneIndicator === StoneIndicator.EMPTY ? 0 : 1}

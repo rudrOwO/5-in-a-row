@@ -69,7 +69,7 @@ func getMaxDepth(saturation uint8) uint8 {
 func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 	for board := range boards {
 		if board.saturation == 0 {
-			possibleResponses <- Response{0, GAMEOVER, -1}
+			possibleResponses <- Response{0, GAMEOVER, -EXTREME_VALUE}
 		} else {
 
 			AIScore, AIMove := -EXTREME_VALUE, 0
@@ -131,9 +131,11 @@ func GenerateResponse(clientBoard [100]uint8) Response {
 	}
 	close(boardsChannel)
 
-	highestUtility, bestResponse := -10, Response{0, false, 0}
+	highestUtility, bestResponse := -EXTREME_VALUE, Response{0, false, 0}
 
-	for response := range possibleResponses {
+	for i := 0; i < JOBS; i++ {
+		response := <-possibleResponses
+
 		if response.utility > highestUtility {
 			highestUtility = response.utility
 			bestResponse = response
