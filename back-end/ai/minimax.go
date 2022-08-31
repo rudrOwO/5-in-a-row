@@ -4,21 +4,21 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 	if GAMEOVER {
 		return 0
 	}
-	if depth == maxDepth || board.saturation == BOARDSIZE {
+	if depth == maxDepth || board.saturation == FRONTIER_BOARD_SIZE {
 		return board.staticEvaluation()
 	}
 
 	depth++
 
 	if turn == WHITE { // This is Maximizing Player (AI -> WHITE)
-		bestScore := -EXTREME_VALUE
+		bestScore := -INFINITY
 
 		for index, piece := range board.grid {
 			if piece == EMPTY {
 				board.grid[index] = WHITE
 				board.saturation++
 
-				score := miniMax(board, alpha, beta, BLACK, depth, getMaxDepth(board.saturation))
+				score := miniMax(board, alpha, beta, BLACK, depth, maxDepth)
 
 				if score > bestScore {
 					bestScore = score
@@ -37,14 +37,14 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 		return bestScore
 
 	} else { // This is Minimizing Player (Human -> BLACK)
-		bestScore := EXTREME_VALUE
+		bestScore := INFINITY
 
 		for index, piece := range board.grid {
 			if piece == EMPTY {
 				board.grid[index] = BLACK
 				board.saturation++
 
-				score := miniMax(board, alpha, beta, WHITE, depth, getMaxDepth(board.saturation))
+				score := miniMax(board, alpha, beta, WHITE, depth, maxDepth)
 
 				if score < bestScore {
 					bestScore = score

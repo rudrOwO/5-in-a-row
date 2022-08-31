@@ -5,7 +5,8 @@ type Point struct {
 }
 
 type Board struct {
-	grid       [BOARDSIZE]uint8
+	origin     uint8
+	grid       [FRONTIER_BOARD_SIZE]uint8
 	saturation uint8 // How much of the board is filled up
 }
 
@@ -14,11 +15,11 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	performance := 0
 
 	// Horizontal
-	for y := uint8(0); y < DIMENSION; y++ {
+	for y := uint8(0); y < FRONTIER_BOARD_DIMENSION; y++ {
 		len := 0
 
-		for x := uint8(0); x < DIMENSION; x++ {
-			if board.grid[y*DIMENSION+x] == piece {
+		for x := uint8(0); x < FRONTIER_BOARD_DIMENSION; x++ {
+			if board.grid[y*FRONTIER_BOARD_DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -30,11 +31,11 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	}
 
 	// Vertical
-	for y := uint8(0); y < DIMENSION; y++ {
+	for y := uint8(0); y < FRONTIER_BOARD_DIMENSION; y++ {
 		len := 0
 
-		for x := uint8(0); x < DIMENSION; x++ {
-			if board.grid[x*DIMENSION+y] == piece {
+		for x := uint8(0); x < FRONTIER_BOARD_DIMENSION; x++ {
+			if board.grid[x*FRONTIER_BOARD_DIMENSION+y] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -50,7 +51,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for y, x := point.y, point.x; y != point.x; {
-			if board.grid[y*DIMENSION+x] == piece {
+			if board.grid[y*FRONTIER_BOARD_DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -68,7 +69,7 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		len := 0
 
 		for y, x := point.y, point.x; y != 0 && x != 0; {
-			if board.grid[y*DIMENSION+x] == piece {
+			if board.grid[y*FRONTIER_BOARD_DIMENSION+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -82,9 +83,9 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	}
 
 	// Game Over -> 5 in a row!
-	if segmentInstances[5] > 0 {
-		GAMEOVER = true
-		return EXTREME_VALUE
+	if segmentInstances[5] > 0 && piece == WHITE {
+		// GAMEOVER = true
+		return INFINITY
 	}
 
 	// Evaluate Board State

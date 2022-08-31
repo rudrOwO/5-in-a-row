@@ -1,9 +1,5 @@
 package ai
 
-import (
-	"math"
-)
-
 /*
 	* UI
 	* board
@@ -23,18 +19,19 @@ type Response struct {
 
 // * GLOBAL STUFF
 const (
-	DIMENSION     uint8 = 5
-	BOARDSIZE     uint8 = DIMENSION * DIMENSION
-	EMPTY         uint8 = 0
-	WHITE         uint8 = 1 // AI
-	BLACK         uint8 = 2 // Human
-	EXTREME_VALUE int   = math.MaxInt - 1
-	JOBS          int   = 6 * 6
+	MAIN_BOARD_DIMENSION     uint8 = 10
+	FRONTIER_BOARD_DIMENSION uint8 = 5
+	FRONTIER_BOARD_SIZE      uint8 = FRONTIER_BOARD_DIMENSION * FRONTIER_BOARD_DIMENSION
+	EMPTY                    uint8 = 0
+	WHITE                    uint8 = 1 // AI
+	BLACK                    uint8 = 2 // Human
+	INFINITY                 int   = 1e7
+	JOBS                     int   = 6 * 6
 )
 
 var (
 	GAMEOVER            bool           = false
-	SEGMENT_VALUE       [6]int         = [6]int{-1, 1, 2, 6, 100, 1000}
+	SEGMENT_VALUE       [6]int         = [6]int{-1, 1, 4, 9, 16, 100}
 	POS_DIAGONAL_POINTS [2*5 - 3]Point = [2*5 - 3]Point{
 		{1, 0},
 		{2, 0},
@@ -63,27 +60,28 @@ func getMaxDepth(saturation uint8) uint8 {
 		return 5
 	}
 
-	return BOARDSIZE // 16 ~ 25 slots occupied
+	return FRONTIER_BOARD_SIZE // 16 ~ 25 slots occupied
 }
 
 func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 	for board := range boards {
-		if board.saturation == 0 {
-			possibleResponses <- Response{0, GAMEOVER, -EXTREME_VALUE}
+		if board.saturation == 0 || board.saturation == FRONTIER_BOARD_SIZE {
+			possibleResponses <- Response{0, GAMEOVER, -INFINITY}
 		} else {
 
-			AIScore, AIMove := -EXTREME_VALUE, 0
+			AIScore, AIMove := -INFINITY, 0
 
 			for index, piece := range board.grid {
 				if piece == EMPTY {
 					board.grid[index] = WHITE
 					board.saturation++
 
-					score := miniMax(board, -EXTREME_VALUE, EXTREME_VALUE, BLACK, 1, getMaxDepth(board.saturation))
+					score := miniMax(board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
 
 					if score > AIScore {
 						AIScore = score
-						AIMove = index
+						// * Transform co-ordinates from local board to main board
+						AIMove = int(board.origin) + (index/int(FRONTIER_BOARD_DIMENSION))*int(MAIN_BOARD_DIMENSION) + (index % int(FRONTIER_BOARD_DIMENSION))
 					}
 
 					board.grid[index] = EMPTY
@@ -91,7 +89,7 @@ func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 				}
 			}
 
-			humanScore := miniMax(board, -EXTREME_VALUE, EXTREME_VALUE, BLACK, 1, getMaxDepth(board.saturation))
+			humanScore := miniMax(board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
 
 			possibleResponses <- Response{
 				AIMove:     uint8(AIMove),
@@ -102,7 +100,7 @@ func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 	}
 }
 
-func GenerateResponse(clientBoard [100]uint8) Response {
+func GenerateResponse(mainBoard [100]uint8) Response {
 	boardsChannel := make(chan Board, JOBS)
 	possibleResponses := make(chan Response, JOBS)
 
@@ -112,13 +110,13 @@ func GenerateResponse(clientBoard [100]uint8) Response {
 	}
 
 	// Creating 36 boards from the 10x10 board (from client)
-	for i := int8(0); i <= 5; i++ {
-		for j := int8(0); j <= 5; j++ {
-			newBoard := Board{grid: [BOARDSIZE]uint8{}, saturation: 0}
+	for i := uint8(0); i <= 5; i++ {
+		for j := uint8(0); j <= 5; j++ {
+			newBoard := Board{origin: i*MAIN_BOARD_DIMENSION + j, grid: [FRONTIER_BOARD_SIZE]uint8{}, saturation: 0}
 
-			for y, k := i, int8(0); y < i+5; y++ {
+			for y, k := i, 0; y < i+5; y++ {
 				for x := j; x < j+5; x++ {
-					if piece := clientBoard[y*10+x]; piece != EMPTY {
+					if piece := mainBoard[y*MAIN_BOARD_DIMENSION+x]; piece != EMPTY {
 						newBoard.grid[k] = piece
 						newBoard.saturation++
 					}
@@ -131,7 +129,7 @@ func GenerateResponse(clientBoard [100]uint8) Response {
 	}
 	close(boardsChannel)
 
-	highestUtility, bestResponse := -EXTREME_VALUE, Response{0, false, 0}
+	highestUtility, bestResponse := -INFINITY, Response{0, false, 0}
 
 	for i := 0; i < JOBS; i++ {
 		response := <-possibleResponses
