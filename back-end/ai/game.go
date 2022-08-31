@@ -7,8 +7,8 @@ package ai
 	* minimax + pruning
 	* Utility of move
 	* Concurrency
-	? Move Ordering
 	? Caching
+	? Move Ordering
 */
 
 type Response struct {
@@ -30,8 +30,14 @@ const (
 )
 
 var (
-	GAMEOVER            bool           = false
-	SEGMENT_VALUE       [6]int         = [6]int{-1, 1, 4, 9, 16, 100}
+	GAMEOVER      bool   = false
+	SEGMENT_VALUE [6]int = [6]int{-1,
+		1,   // 1 in a row
+		5,   // 2 in a row
+		10,  // 3 in a row
+		1e3, // 4 in a row
+		1e4, // 5 in a row
+	}
 	POS_DIAGONAL_POINTS [2*5 - 3]Point = [2*5 - 3]Point{
 		{1, 0},
 		{2, 0},

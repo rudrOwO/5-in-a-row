@@ -1,7 +1,7 @@
 package ai
 
 type Point struct {
-	y, x uint8
+	y, x int
 }
 
 type Board struct {
@@ -10,6 +10,7 @@ type Board struct {
 	saturation uint8 // How much of the board is filled up
 }
 
+// ! FIX SEGMENT COUNT BUG
 func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	var segmentInstances [6]int
 	performance := 0
@@ -50,8 +51,8 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	for _, point := range POS_DIAGONAL_POINTS {
 		len := 0
 
-		for y, x := point.y, point.x; y != point.x; {
-			if board.grid[y*FRONTIER_BOARD_DIMENSION+x] == piece {
+		for y, x := point.y, point.x; y >= point.x; {
+			if board.grid[y*int(FRONTIER_BOARD_DIMENSION)+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -68,8 +69,8 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	for _, point := range NEG_DIAGONAL_POINTS {
 		len := 0
 
-		for y, x := point.y, point.x; y != 0 && x != 0; {
-			if board.grid[y*FRONTIER_BOARD_DIMENSION+x] == piece {
+		for y, x := point.y, point.x; y >= 0 && x >= 0; {
+			if board.grid[y*int(FRONTIER_BOARD_DIMENSION)+x] == piece {
 				len++
 			} else {
 				segmentInstances[len]++
@@ -82,14 +83,13 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 		segmentInstances[len]++
 	}
 
-	// Game Over -> 5 in a row!
-	if segmentInstances[5] > 0 && piece == WHITE {
-		// GAMEOVER = true
-		return INFINITY
-	}
+	// * Prevent 5 in a row from Human
+	// if segmentInstances[5] > 0 && piece == BLACK {
+	// 	return INFINITY
+	// }
 
 	// Evaluate Board State
-	for segmentLength := 1; segmentLength <= 4; segmentLength++ {
+	for segmentLength := 1; segmentLength <= 5; segmentLength++ {
 		performance += SEGMENT_VALUE[segmentLength] * segmentInstances[segmentLength]
 	}
 

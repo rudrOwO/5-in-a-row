@@ -17,8 +17,11 @@ type Request struct {
 }
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(cors.Default()) // Allow all origins
+
+	ai.Test()
 
 	r.POST("/", func(c *gin.Context) {
 		var grid Request
