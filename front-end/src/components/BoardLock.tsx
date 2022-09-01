@@ -11,6 +11,8 @@ const BoardLock = ({ message }: BoardLockProps) => (
     </Text>
     <Box
       position="fixed"
+      top="0"
+      left="0"
       zIndex={5}
       width="100vw"
       height="100vh"

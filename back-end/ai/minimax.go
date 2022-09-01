@@ -23,7 +23,7 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 				if bestScore > alpha {
 					alpha = bestScore
 				}
-				if alpha > beta {
+				if alpha >= beta {
 					break
 				}
 
@@ -49,7 +49,7 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 				if bestScore < beta {
 					beta = bestScore
 				}
-				if alpha > beta {
+				if alpha >= beta {
 					break
 				}
 

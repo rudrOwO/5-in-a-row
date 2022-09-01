@@ -27,6 +27,7 @@ const ClearButton = (props: UndoButtonProps) => {
 
   return (
     <Button
+      zIndex={10}
       disabled={disabled}
       bg="#1A1A1A"
       colorScheme="blackAlpha"

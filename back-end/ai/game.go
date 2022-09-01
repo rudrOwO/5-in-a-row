@@ -59,10 +59,10 @@ var (
 
 func getMaxDepth(saturation uint8) uint8 {
 	if saturation < 9 { // 1 ~ 8 slots occupied
-		return 4
+		return 5
 	}
 	if saturation < 16 { // 9 ~ 15 slots occupied
-		return 5
+		return 6
 	}
 
 	return FRONTIER_BOARD_SIZE // 16 ~ 25 slots occupied
