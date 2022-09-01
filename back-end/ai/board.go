@@ -10,7 +10,7 @@ type Board struct {
 	saturation uint8 // How much of the board is filled up
 }
 
-// ! FIX SEGMENT COUNT BUG
+// ? FIX SEGMENT COUNT BUG
 func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	var segmentInstances [6]int
 	performance := 0
@@ -82,11 +82,6 @@ func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 
 		segmentInstances[len]++
 	}
-
-	// * Prevent 5 in a row from Human
-	// if segmentInstances[5] > 0 && piece == BLACK {
-	// 	return INFINITY
-	// }
 
 	// Evaluate Board State
 	for segmentLength := 1; segmentLength <= 5; segmentLength++ {

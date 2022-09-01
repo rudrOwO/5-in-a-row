@@ -21,8 +21,6 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default()) // Allow all origins
 
-	ai.Test()
-
 	r.POST("/", func(c *gin.Context) {
 		var grid Request
 
@@ -32,8 +30,6 @@ func main() {
 		}
 
 		response := ai.GenerateResponse(grid.Grid)
-
-		ai.GAMEOVER = false
 
 		c.JSON(http.StatusOK, response)
 	})

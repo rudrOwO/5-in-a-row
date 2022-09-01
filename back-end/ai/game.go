@@ -30,7 +30,6 @@ const (
 )
 
 var (
-	GAMEOVER      bool   = false
 	SEGMENT_VALUE [6]int = [6]int{-1,
 		1,   // 1 in a row
 		5,   // 2 in a row
@@ -72,15 +71,20 @@ func getMaxDepth(saturation uint8) uint8 {
 func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 	for board := range boards {
 		if board.saturation == 0 || board.saturation == FRONTIER_BOARD_SIZE {
-			possibleResponses <- Response{0, GAMEOVER, -INFINITY}
+			possibleResponses <- Response{0, false, -INFINITY}
 		} else {
 
-			AIScore, AIMove := -INFINITY, 0
+			AIScore, AIMove, isGameOver := -INFINITY, 0, false
 
 			for index, piece := range board.grid {
 				if piece == EMPTY {
 					board.grid[index] = WHITE
 					board.saturation++
+
+					// Check if Game is Over (By AI)
+					if board.agentPerformanceEvaluation(WHITE) >= SEGMENT_VALUE[5] {
+						isGameOver = true
+					}
 
 					score := miniMax(board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
 
@@ -99,7 +103,7 @@ func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 
 			possibleResponses <- Response{
 				AIMove:     uint8(AIMove),
-				IsGameOver: GAMEOVER,
+				IsGameOver: isGameOver,
 				utility:    AIScore - humanScore,
 			}
 		}
@@ -128,6 +132,11 @@ func GenerateResponse(mainBoard [100]uint8) Response {
 					}
 					k++
 				}
+			}
+
+			// Check if Game is Over (By Human)
+			if newBoard.agentPerformanceEvaluation(BLACK) >= SEGMENT_VALUE[5] {
+				return Response{AIMove: 0, IsGameOver: true}
 			}
 
 			boardsChannel <- newBoard

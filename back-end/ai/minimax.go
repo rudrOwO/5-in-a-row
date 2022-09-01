@@ -1,9 +1,6 @@
 package ai
 
 func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
-	if GAMEOVER {
-		return 0
-	}
 	if depth == maxDepth || board.saturation == FRONTIER_BOARD_SIZE {
 		return board.staticEvaluation()
 	}
