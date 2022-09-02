@@ -86,7 +86,10 @@ func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 						isGameOver = true
 					}
 
-					score := miniMax(board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
+					score := miniMax(&board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
+
+					board.grid[index] = EMPTY
+					board.saturation--
 
 					if score > AIScore {
 						AIScore = score
@@ -94,12 +97,10 @@ func dispatchJob(boards <-chan Board, possibleResponses chan<- Response) {
 						AIMove = int(board.origin) + (index/int(FRONTIER_BOARD_DIMENSION))*int(MAIN_BOARD_DIMENSION) + (index % int(FRONTIER_BOARD_DIMENSION))
 					}
 
-					board.grid[index] = EMPTY
-					board.saturation--
 				}
 			}
 
-			humanScore := miniMax(board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
+			humanScore := miniMax(&board, -INFINITY, INFINITY, BLACK, 1, getMaxDepth(board.saturation))
 
 			possibleResponses <- Response{
 				AIMove:     uint8(AIMove),

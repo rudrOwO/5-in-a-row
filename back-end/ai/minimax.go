@@ -1,6 +1,6 @@
 package ai
 
-func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
+func miniMax(board *Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 	if depth == maxDepth || board.saturation == FRONTIER_BOARD_SIZE {
 		return board.staticEvaluation()
 	}
@@ -17,6 +17,9 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 
 				score := miniMax(board, alpha, beta, BLACK, depth, maxDepth)
 
+				board.grid[index] = EMPTY
+				board.saturation--
+
 				if score > bestScore {
 					bestScore = score
 				}
@@ -27,8 +30,6 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 					break
 				}
 
-				board.grid[index] = EMPTY
-				board.saturation--
 			}
 		}
 		return bestScore
@@ -43,6 +44,9 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 
 				score := miniMax(board, alpha, beta, WHITE, depth, maxDepth)
 
+				board.grid[index] = EMPTY
+				board.saturation--
+
 				if score < bestScore {
 					bestScore = score
 				}
@@ -53,8 +57,6 @@ func miniMax(board Board, alpha, beta int, turn, depth, maxDepth uint8) int {
 					break
 				}
 
-				board.grid[index] = EMPTY
-				board.saturation--
 			}
 		}
 		return bestScore
