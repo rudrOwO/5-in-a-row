@@ -21,7 +21,9 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default()) // Allow all origins
 
-	r.POST("/", func(c *gin.Context) {
+	r.Static("/", "./dist/")
+
+	r.POST("/ai", func(c *gin.Context) {
 		var grid Request
 
 		if err := c.BindJSON(&grid); err != nil {

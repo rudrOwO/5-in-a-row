@@ -10,7 +10,6 @@ type Board struct {
 	saturation uint8 // How much of the board is filled up
 }
 
-// ? FIX SEGMENT COUNT BUG
 func (board *Board) agentPerformanceEvaluation(piece uint8) int {
 	var segmentInstances [6]int
 	performance := 0

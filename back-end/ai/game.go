@@ -1,16 +1,5 @@
 package ai
 
-/*
-	* UI
-	* board
-	* static eval
-	* minimax + pruning
-	* Utility of move
-	* Concurrency
-	? Caching
-	? Move Ordering
-*/
-
 type Response struct {
 	AIMove     uint8 `json:"AIMove"`
 	IsGameOver bool  `json:"isGameOver"`

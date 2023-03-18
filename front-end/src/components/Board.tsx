@@ -1,13 +1,13 @@
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
-import Stone, { stoneSize } from "./Stone";
-import LineGrid from "./LineGrid";
-import BoardLock from "./BoardLock";
-import UndoButton from "./UndoButton";
-import ClearButton from "./ClearButton";
+import { Box, Flex, SimpleGrid } from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react"
+import Stone, { stoneSize } from "./Stone"
+import LineGrid from "./LineGrid"
+import BoardLock from "./BoardLock"
+import UndoButton from "./UndoButton"
+import ClearButton from "./ClearButton"
 
-export const boardSize = `${(10 + (10 - 1) / 2) * stoneSize}rem`;
-const stoneSpacing = `${stoneSize / 2}rem`;
+export const boardSize = `${(10 + (10 - 1) / 2) * stoneSize}rem`
+const stoneSpacing = `${stoneSize / 2}rem`
 export enum StoneIndicator {
   EMPTY,
   WHITE,
@@ -16,28 +16,21 @@ export enum StoneIndicator {
 
 const Board = () => {
   const [board, setBoard] = useState<StoneIndicator[]>(() => {
-    const filler = new Array<StoneIndicator>(10 * 10);
+    const filler = new Array<StoneIndicator>(10 * 10)
 
     for (let i = 0; i < 10 * 10; ++i) {
-      filler[i] = StoneIndicator.EMPTY;
+      filler[i] = StoneIndicator.EMPTY
     }
-    return filler;
-  });
-  const [isFetching, setIsFetching] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const history = useRef<number[]>([]);
+    return filler
+  })
+  const [isFetching, setIsFetching] = useState(false)
+  const [isGameOver, setIsGameOver] = useState(false)
+  const history = useRef<number[]>([])
 
   useEffect(() => {
-    /*
-     * * Push move to history
-     * * Update move in board
-     * * Update isFetching state
-     * * Handle Game Over
-     * * Response JSON : {"AIMove": 0,"isGameOver":false}
-     */
     if (isFetching) {
       const fetchAIMove = async () => {
-        const response = await fetch("http://localhost:5000/", {
+        const response = await fetch("http://localhost:5000/ai", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -45,25 +38,25 @@ const Board = () => {
           body: JSON.stringify({
             grid: board,
           }),
-        });
+        })
 
-        const { AIMove, isGameOver } = await response.json();
+        const { AIMove, isGameOver } = await response.json()
 
-        history.current.push(AIMove);
+        history.current.push(AIMove)
 
-        setBoard(prevBoard => {
-          const mutatedBoard = [...prevBoard];
-          mutatedBoard[AIMove] = StoneIndicator.WHITE;
-          return mutatedBoard;
-        });
+        setBoard((prevBoard) => {
+          const mutatedBoard = [...prevBoard]
+          mutatedBoard[AIMove] = StoneIndicator.WHITE
+          return mutatedBoard
+        })
 
-        setIsFetching(false);
-        setIsGameOver(isGameOver);
-      };
+        setIsFetching(false)
+        setIsGameOver(isGameOver)
+      }
 
-      fetchAIMove();
+      fetchAIMove()
     }
-  }, [isFetching]);
+  }, [isFetching])
 
   return (
     <Box>
@@ -82,11 +75,18 @@ const Board = () => {
         />
       </Flex>
       <LineGrid />
-      <SimpleGrid position="relative" zIndex={1} columns={10} spacing={stoneSpacing}>
+      <SimpleGrid
+        position="relative"
+        zIndex={1}
+        columns={10}
+        spacing={stoneSpacing}
+      >
         {board.map((stoneIndicator, i) => (
           <Stone
             stoneIndicator={
-              stoneIndicator === StoneIndicator.WHITE ? StoneIndicator.WHITE : StoneIndicator.BLACK
+              stoneIndicator === StoneIndicator.WHITE
+                ? StoneIndicator.WHITE
+                : StoneIndicator.BLACK
             }
             position={i}
             key={i}
@@ -102,7 +102,7 @@ const Board = () => {
         {isGameOver && <BoardLock message="Game Over!" />}
       </Flex>
     </Box>
-  );
-};
+  )
+}
 
-export default Board;
+export default Board
